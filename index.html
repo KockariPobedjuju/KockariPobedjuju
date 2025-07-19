@@ -1329,7 +1329,7 @@
                 </ul>
                 <p class="mt-2"><b>Kako unosite par i tip?</b><br>Naš sajt nema unapred definisanu sportsku ponudu, što znači da možete igrati bilo koji sportski događaj koji postoji u kladionicama.</p>
                 <p class="mt-2"><b>Primeri unosa:</b><br>U polje za par: <i>PSG - Real </i>, u polje za tip: <i>1</i><br>U polje za par: <i>N.Jokić</i>, u polje za tip: <i>35.5+</i></p>
-                <p class="mt-2">Zatim ispod unesite visinu uloga za taj tiket. Svaki korisnik ima početnih 1000 poena, ali dnevno možete koristiti maksimalno 100 poena.</p>
+                <p class="mt-2">Zatim ispod unesite visinu uloga (minimalno 20 poena) za taj tiket.  Svaki korisnik ima početnih 1000 poena, ali dnevno možete koristiti maksimalno 100 poena.</p>
                 <p class="mt-2">Nakon što ste uneli sve parove, tipove i ulog, kliknite na "Pošalji tiket".</p>
                 <h3>3. PREGLED TIKETA</h3>
                 <p>Svoje tikete možete pogledati tako što kliknete na Vašu profilnu fotografiju u ćošku, gde će se pojaviti opcija za pregled tiketa sa kvotama i statusom.</p>
@@ -1478,7 +1478,7 @@
     const INITIAL_TOTAL_POINTS = 1000;
     const MIN_STAKE = 20;
     const COIN_IMAGE_URL = 'https://i.imgur.com/oV8njyX.png';
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8QO-cxZ7q1EZ9huoy3Yv2ifty8iWBgMTt_rWAxWGUX3mj2TpF81K4jElFTEKIFMqLvw/exec';
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjU5Od_rw-mePJYF4LFwLATLhUu3uxq8puhf85zaBLFwovXRizB5QrJsb9K1hLmR7X/exec';
     const TROPHY_DEFINITIONS = {
         // Sezonski trofeji
         'zlatna_serija': { name: 'Zlatna serija', description: 'Ostvareno minimalno 5 uzastopnih dobitnih tiketa', img: 'https://i.imgur.com/j7eCnfN.png', type: 'seasonal' },
@@ -1899,6 +1899,12 @@
                 appCache.users = data.users;
                 appCache.tickets = data.tickets; 
                 appCache.settings = data.settings;
+if (currentUser && currentUser.ProfilnaSlika && currentUser.ProfilnaSlika.startsWith('data:image')) {
+                    const userInCache = appCache.users.find(u => u.KorisnikID === currentUser.KorisnikID);
+                    if (userInCache) {
+                        userInCache.ProfilnaSlika = currentUser.ProfilnaSlika;
+                    }
+                }
                 appCache.isDataLoaded = true;
                 
                 updateSeasonAndRoundDisplay();
@@ -3787,7 +3793,15 @@ outcomesContainer.appendChild(square);
 
             currentUser.ProfilnaSlika = resizedBase64;
             localStorage.setItem('kockariUser', JSON.stringify(currentUser));
+             const userIndexInCache = appCache.users.findIndex(u => u.KorisnikID === currentUser.KorisnikID);
+            if (userIndexInCache > -1) {
+                appCache.users[userIndexInCache].ProfilnaSlika = resizedBase64;
+            }
 
+            const userIndexInLeaderboard = appCache.leaderboard.findIndex(u => u.KorisnikID === currentUser.KorisnikID);
+            if (userIndexInLeaderboard > -1) {
+                appCache.leaderboard[userIndexInLeaderboard].ProfilnaSlika = resizedBase64;
+            }
             document.querySelectorAll('#profilePic, #profileModalPic, #mobileProfileButton img').forEach(img => {
                 img.src = resizedBase64;
             });
