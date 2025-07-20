@@ -3548,11 +3548,16 @@ outcomesContainer.appendChild(square);
                     }
                 };
                 bestTicket = {
-                    Status: 'Dobitan', Datum: historyData.DatumNajboljegTiketa || 'N/A', Ulog: parseFloat(historyData.UlogNajboljegTiketa || 0),
-                    Kvota: parseFloat(historyData.UkKvotaNajboljegTiketa || 0), Parovi: safeJsonParse(historyData.ParoviNajboljegTiketa),
-                    Tipovi: safeJsonParse(historyData.TipoviNajboljegTiketa), Kvote: safeJsonParse(historyData.KvoteNajboljegTiketa),
-                    Vreme: safeJsonParse(historyData.VremeNajboljegTiketa), Rezultati: safeJsonParse(historyData.RezulatiNajboljegTiketa),
-                    StatusParova: safeJsonParse(historyData.StatusParovaNajboljegTiketa)
+                    Status: 'Dobitan',
+                    Datum: historyData.DatumNajboljegTiketa || 'N/A',
+                    Ulog: parseFloat(historyData.UlogNajboljegTiketa || 0),
+                    Kvota: parseFloat(historyData.UkKvotaNajboljegTiketa || 0),
+                    Parovi: historyData.ParoviNajboljegTiketa || [],
+                    Tipovi: historyData.TipoviNajboljegTiketa || [],
+                    Kvote: historyData.KvoteNajboljegTiketa || [],
+                    Vreme: historyData.VremeNajboljegTiketa || [],
+                    Rezultati: historyData.RezulatiNajboljegTiketa || [],
+                    StatusParova: historyData.StatusParovaNajboljegTiketa || []
                 };
             }
         } catch (error) {
